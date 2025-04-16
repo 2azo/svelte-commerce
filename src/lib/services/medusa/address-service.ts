@@ -37,6 +37,7 @@ export const fetchAddresses = async ({ origin, storeId, server = false, sid }: a
 		}
 		return { myAddresses: { data: myAddresses }, selectedAddress, count: res?.count }
 	} catch (e) {
+		console.error(`getMedusajsApi(${editAddress}) failed:`, e);
 		error(e.status, e.message)
 	}
 }

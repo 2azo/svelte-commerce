@@ -1,16 +1,16 @@
 import cookie from 'cookie'
 import {
-	BIG_COMMERCE_BASE_URL,
+	// BIG_COMMERCE_BASE_URL,
 	HTTP_ENDPOINT,
-	bigcommerceHeaders,
-	woocommerceHeaders,
+	// bigcommerceHeaders,
+	// woocommerceHeaders,
 	MEDUSAJS_BASE_URL,
-	SHOPIFY_BASE_URL
+	// SHOPIFY_BASE_URL
 } from '../config'
 
 // import pkg from '@woocommerce/woocommerce-rest-api' // node v-18
 // const WooCommerceRestApi = pkg.default // node v-16
-import { WOO_COMMERCE_STORE_LINK, WOO_COMMERCE_KEY, WOO_COMMERCE_SECRET } from '../config'
+// import { WOO_COMMERCE_STORE_LINK, WOO_COMMERCE_KEY, WOO_COMMERCE_SECRET } from '../config'
 import { serialize } from '.'
 
 // const WooCommerce = new WooCommerceRestApi({
@@ -203,27 +203,32 @@ export const postBigCommerceApi = async (endpoint: string, query: any, sid?: any
 // ---------------------------------- X ----------------------------------
 
 export const getMedusajsApi = async (endpoint: string, query?: any, sid?: any) => {
-	try {
-		const response = await fetch(MEDUSAJS_BASE_URL + '/' + endpoint, {
-			method: 'GET',
-			credentials: 'include',
-			headers: { Cookie: `connect.sid=${sid}` }
-		})
-		const isJson = response.headers.get('content-type')?.includes('application/json')
-		const res = isJson ? await response.json() : await response.text()
+    try {
+        const fullUrl = `${MEDUSAJS_BASE_URL}/${endpoint}`;
+        // console.log('Requesting URL:', fullUrl); // Log the URL
+        const response = await fetch(fullUrl, {
+            method: 'GET',
+            credentials: 'include',    
+            headers: {
+                Cookie: `connect.sid=${sid}`,
+                'x-publishable-api-key': 'pk_fd30032a2deebdebf93cec580fe0288a275d72ff64a016b217257fc0e0481221'
+            }
+        });
+        // console.log('Response Status:', response.status); // Log the status
 
-		if (res?.status > 399) {
-			throw { status: res.status, message: res }
-		} else if (response?.status > 399) {
-			throw { status: response.status, message: res }
-		} else {
-			return res
-		}
-	} catch (e) {
-		// console.log(`/lib/utils/server.ts getMedusajsApi(${HTTP_ENDPOINT + '/api/' + endpoint})`, e)
-		throw e
-	}
-}
+        const isJson = response.headers.get('content-type')?.includes('application/json');
+        const res = await response.text(); // Always get text first
+        // console.log('Response Body:', res); // Log the raw response
+
+        if (response.status >= 400) {
+            throw { status: response.status, message: res };
+        }
+        return isJson ? JSON.parse(res) : res; // Parse JSON only if applicable
+    } catch (e) {
+        console.log('Error in getMedusajsApi:', e); // Improved error logging
+        throw e;
+    }
+};
 
 export const postMedusajsApi = async (endpoint: string, data: any, sid?: any) => {
 	try {
@@ -235,7 +240,8 @@ export const postMedusajsApi = async (endpoint: string, data: any, sid?: any) =>
 			body: JSON.stringify(data || {}),
 			headers: {
 				'Content-Type': 'application/json',
-				Cookie: `connect.sid=${sid}`
+				Cookie: `connect.sid=${sid}`,
+				'x-publishable-api-key': 'pk_fd30032a2deebdebf93cec580fe0288a275d72ff64a016b217257fc0e0481221'
 			}
 		})
 		// const allHeaders = Object.fromEntries(response.headers.entries())

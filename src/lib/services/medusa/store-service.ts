@@ -99,7 +99,7 @@ export const getStoreData = async ({
 		const uri = new URL(url)
 
 		storeRes = await fetchInit(uri.host)
-
+		
 		store = {
 			id: storeRes?.storeOne?._id,
 			address: storeRes?.storeOne?.address,
@@ -107,8 +107,8 @@ export const getStoreData = async ({
 			alert: storeRes?.storeOne?.alert,
 			allowBackOrder: storeRes.storeOne?.allowBackOrder,
 			close: storeRes?.storeOne?.close,
-			currencyCode: storeRes?.storeOne?.storeCurrency?.isoCode || 'USD',
-			currencySymbol: storeRes?.storeOne?.storeCurrency?.symbol || '$',
+			currencyCode: storeRes?.storeOne?.storeCurrency?.isoCode || 'EUR',
+			currencySymbol: storeRes?.storeOne?.storeCurrency?.symbol || '€',
 			description: storeRes?.storeOne?.description,
 			dimentionUnit: storeRes?.storeOne?.dimentionUnit,
 			domain: storeRes?.storeOne?.domain,

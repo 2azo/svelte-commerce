@@ -502,7 +502,7 @@ onMount(async () => {
 								? 'hidden'
 								: 'flex'} mt-1 flex-wrap items-baseline justify-start gap-1.5 text-xs leading-3">
 							<span class="text-base font-bold whitespace-nowrap leading-3">
-								{currency(product.price, store?.currencySymbol)}
+								<!-- {currency(product.price, store?.currencySymbol)} -->
 							</span>
 
 							{#if product.mrp > product.price}

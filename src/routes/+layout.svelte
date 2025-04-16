@@ -26,6 +26,7 @@ import whatsappIcon from '$lib/assets/social-media/whatsapp.png'
 import { Toaster } from 'svelte-sonner'
 
 export let data
+// console.log('data', data);
 
 $: innerWidth = 0
 // $: isAndroid = false
@@ -96,7 +97,7 @@ onMount(async () => {
 
 	{#if !data?.store}
 		<!-- If store not found -->
-
+		<!-- <h1> store not found </h1> -->
 		<div class="h-screen w-full bg-white flex items-center justify-center">
 			<a
 				href="https://litekart.in/"
@@ -113,7 +114,7 @@ onMount(async () => {
 		</div>
 	{:else if data?.store && !data?.store?.closed}
 		<!-- If store found and is not closed -->
-
+		<!-- <h1> store found and is not closed </h1> -->
 		<section class="minimum-width-rem relative flex min-h-screen flex-col bg-white antialiased">
 			<div class="h-rem w-full flex-1">
 				{#key data.url}
@@ -139,14 +140,14 @@ onMount(async () => {
 					alt=""
 					class="h-10 w-10 object-contain transform hover:scale-125 hover:-translate-y-2 transition duration-300" />
 			</a>
-		{/if}
+		{/if}	
 
 		<!-- {#if ReloadPrompt}
 			<svelte:component this="{ReloadPrompt}" />
 		{/if} -->
 	{:else}
 		<!-- If store found and is closed -->
-
+		<!-- <h1> store found a	nd is closed </h1> -->
 		<div class="h-screen w-full bg-white flex items-center justify-center">
 			<div
 				class="fixed top-0 inset-x-0 z-10 p-5 px-10 flex items-center justify-center border-b shadow-md">

@@ -7,6 +7,7 @@ import * as Carousel from '$lib/shad-components/ui/carousel/index'
 
 export let products = []
 export let title = ''
+// console.log('products', products);
 
 $: innerWidth = 0
 let responsiveWidth = 0
@@ -78,7 +79,7 @@ $: store = $page.data.store
 									<div
 										class="p-2 flex flex-wrap items-baseline justify-start leading-4 text-xs gap-1.5">
 										<span class="font-bold text-sm whitespace-nowrap">
-											{currency(p.price, store?.currencySymbol)}
+											<!-- {currency(p.price, store?.currencySymbol)} -->
 										</span>
 
 										{#if p.mrp > p.price}

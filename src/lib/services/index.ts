@@ -1,56 +1,56 @@
 // export * from './bigcommerce'
-import { services } from '@misiki/litekart-utils'
-export const {
-	AddressService,
-	AutocompleteService,
-	BannersService,
-	BlogService,
-	BrandService,
-	CartService,
-	CategoryService,
-	ChatService,
-	CollectionService,
-	ContactService,
-	CountryService,
-	CouponService,
-	DealsService,
-	DemoRequestService,
-	DiscountService,
-	FaqService,
-	FeedbackService,
-	GalleryService,
-	HokodoService,
-	HomeService,
-	InitService,
-	InvoiceService,
-	MenuService,
-	OrdersService,
-	PageService,
-	PaymentMethodService,
-	PopularityService,
-	PopularSearchService,
-	ProductService,
-	ReelService,
-	ReturnService,
-	ReviewService,
-	StoreService,
-	UserService,
-	VendorService,
-	WishlistService,
-	ZipService
-} = services
+// import { services } from '@misiki/litekart-utils'
+// export const {
+// 	AddressService,
+// 	AutocompleteService,
+// 	BannersService,
+// 	BlogService,
+// 	BrandService,
+// 	CartService,
+// 	CategoryService,
+// 	ChatService,
+// 	CollectionService,
+// 	ContactService,
+// 	CountryService,
+// 	CouponService,
+// 	DealsService,
+// 	DemoRequestService,
+// 	DiscountService,
+// 	FaqService,
+// 	FeedbackService,
+// 	GalleryService,
+// 	HokodoService,
+// 	HomeService,
+// 	InitService,
+// 	InvoiceService,
+// 	MenuService,
+// 	OrdersService,
+// 	PageService,
+// 	PaymentMethodService,
+// 	PopularityService,
+// 	PopularSearchService,
+// 	ProductService,
+// 	ReelService,
+// 	ReturnService,
+// 	ReviewService,
+// 	StoreService,
+// 	UserService,
+// 	VendorService,
+// 	WishlistService,
+// 	ZipService
+// } = services
 
-// export * from './medusa'
+export * from './medusa'
 // export * from './shopify'
 // export * from './woocommerce'
 
 // // services.js
-// import { env } from '$env/dynamic/public'
-// import * as Litekart from './litekart'
-// import * as Shopify from './shopify'
-// import * as Woocommerce from './woocommerce'
-// import * as MedusaJs from './medusa'
-// import * as BigCommerce from './bigcommerce'
+import { env } from '$env/dynamic/public'
+import * as Litekart from './litekart'
+import * as Shopify from './shopify'
+import * as Woocommerce from './woocommerce'
+import * as MedusaJs from './medusa'
+import * as BigCommerce from './bigcommerce'
 
 // export function getSelectedService(serviceName: string) {
 // 	switch (serviceName) {
@@ -69,7 +69,7 @@ export const {
 // 	}
 // }
 
-// const selectedServiceName = env.PUBLIC_SELECTED_SERVICE || 'LITEKART'
+// const selectedServiceName = 'MEDUSAJS'
 
 // const selectedService = getSelectedService(selectedServiceName)
 

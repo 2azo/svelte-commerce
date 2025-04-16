@@ -547,7 +547,7 @@ function handleFilterTags() {
 				</div>
 
 				{#if data?.products?.products.length}
-					<div class="col-span-1 md:col-span-3 lg:col-span-2">
+					<!-- <div class="col-span-1 md:col-span-3 lg:col-span-2">
 						<h3 class="my-5 text-center uppercase">
 							{data.products?.category?.name} price list
 						</h3>
@@ -586,7 +586,7 @@ function handleFilterTags() {
 								</li>
 							{/if}
 						</ul>
-					</div>
+					</div> -->
 				{/if}
 			</div>
 		</div>

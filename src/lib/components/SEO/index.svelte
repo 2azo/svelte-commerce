@@ -112,7 +112,7 @@ const schemaOrgProps = {
 	description,
 	entity,
 	entityMeta,
-	facebookPageName,
+	// facebookPageName,
 	featuredImage,
 	githubPage,
 	lastUpdated,

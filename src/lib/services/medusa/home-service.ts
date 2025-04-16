@@ -24,13 +24,12 @@ export const fetchHome = async ({
 					banners: [
 						{
 							sort: 0,
-							img: 'https://s3.ap-south-1.amazonaws.com/litekart.in/img/untitled-design-htiheqvawifr.png',
-							link: '',
+							img: '/images/wohnwert-deutschland_header_erfolg_optimized.jpg', // Updated path							link: '',
 							_id: '64f75e367b63e9599d66ab8b'
 						},
 						{
-							sort: 0,
-							img: 'https://s3.ap-south-1.amazonaws.com/litekart.in/img/untitled-360-190px-1500-380px-vzlc6ffmy4ej.png',
+							sort: 1,
+							img: '/images/wohnwert_immobilien_chancen_und_risiken.jpg',
 							link: '',
 							_id: '64f75eccc99ed399d6de7b40'
 						}
@@ -38,12 +37,12 @@ export const fetchHome = async ({
 					bannersMobile: [
 						{
 							sort: 0,
-							img: 'https://s3.ap-south-1.amazonaws.com/litekart.in/img/untitled-360-190px-1-yroheobmw0hi.png',
+							img: '/images/wohnwert-deutschland_header_erfolg_optimized.jpg',
 							_id: '64f75f1d8efd842c7290a431'
 						},
 						{
-							sort: 0,
-							img: 'https://s3.ap-south-1.amazonaws.com/litekart.in/img/untitled-360-190px-iip6fn8mzk71.png',
+							sort: 1,
+							img: '/images/wohnwert_immobilien_chancen_und_risiken.jpg',
 							_id: '64f75f2cab313ebe612e8ec6'
 						}
 					]

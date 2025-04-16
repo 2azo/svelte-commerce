@@ -7,11 +7,11 @@ export const load = async ({ parent, data, fetch, url }) => {
 	try {
 		const res2 = await fetch('/server/store')
 		const storeFromServer = await res2.json()
-		// locals.storeId = storeFromServer.store?.id
+		data.storeId = storeFromServer.store?.id
 		data.store = storeFromServer.store
-		// data.megamenu = storeFromServer.megamenu
-		// data.menu = storeFromServer.menu
-		// data.popularSearches = storeFromServer.popularSearches
+		data.megamenu = storeFromServer.megamenu
+		data.menu = storeFromServer.menu
+		data.popularSearches = storeFromServer.popularSearches
 		data.url = url.pathname
 		return { ...data }
 	} catch (e) {

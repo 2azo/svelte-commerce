@@ -221,7 +221,8 @@ onMount(() => {
 		{/if}
 
 		{#await data.streamed.home then home}
-			<HeroBannersCollage6 heroBanners="{home.heroBanners}" />
+			<!-- <HeroBannersCollage6 heroBanners="{home.heroBanners}" /> -->
+			<HeroBannersCollage6/>
 		{/await}
 
 		<!-- Popular products -->
@@ -234,7 +235,8 @@ onMount(() => {
 
 		<!-- Trending products -->
 		<!-- Note: Write the categories with comma separation -->
-		<ProductGridShowCase topTitle="New Shop Items" title="Fashion" categories="fashion" />
+		<!-- <ProductGridShowCase topTitle="New Shop Items" title="Fashion" categories="fashion" /> -->
+		<ProductGridShowCase />
 
 		{#if store?.isCollections}
 			<!-- Collections Home -->

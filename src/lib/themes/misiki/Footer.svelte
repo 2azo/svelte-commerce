@@ -588,14 +588,15 @@ function positionToDisplayIsMultiVendor(itemsLength) {
 
 		<div class="flex flex-wrap items-center justify-between gap-5 md:justify-between">
 			<p class="whitespace-nowrap">
-				© {store?.websiteName}
+				<!-- © {store?.websiteName} -->
+				©
 				Powered by
 				<a
-					href="{store?.saasDomain || 'https://litekart.in'}"
+					href="{store?.saasDomain || 'https://martini-werbeagentur.de/'}"
 					rel="external"
 					class="hover:underline"
 					target="_blank">
-					{store?.saasName || 'Litekart'}
+					{store?.saasName || 'Martini Werbeagentur'}
 				</a>
 			</p>
 

@@ -149,7 +149,7 @@ export const updateCart2 = async ({
 				province: shippingAddress.province
 			}
 		}
-		console.log('body', body)
+		// console.log('body', body)
 
 		let res: any = {}
 
@@ -206,7 +206,7 @@ export const updateCart = async ({
 				province: shippingAddress.province
 			}
 		}
-		console.log('body', body)
+		// console.log('body', body)
 
 		let res: any = {}
 

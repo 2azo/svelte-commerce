@@ -36,7 +36,6 @@ import { browser } from '$app/environment'
 import { storeStore } from '$lib/store/store'
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 export let showFooter = false
 export let showPinCodeEntryModal = false
@@ -58,6 +57,7 @@ onMount(() => {
 	<div class="mb-14 lg:mb-0">
 		<!-- Categories slider mobile -->
 
+		<!-- there is no categories in data.home -->
 		{#if data?.home?.categories?.length}
 			<div class="block sm:hidden">
 				<CategoriesMobile loading="{data.home?.isFetching}" categories="{data.home?.categories}" />
@@ -215,7 +215,8 @@ onMount(() => {
 		{/if}
 
 		{#if data.home}
-			<HeroBannersCollage6 heroBanners="{data.home?.heroBanners}" />
+			<!-- <HeroBannersCollage6 heroBanners="{data.home?.heroBanners}" /> -->
+			<HeroBannersCollage6 />
 		{/if}
 
 		<!-- Popular products -->
@@ -228,7 +229,8 @@ onMount(() => {
 
 		<!-- Trending products -->
 		<!-- Note: Write the categories with comma separation -->
-		<ProductGridShowCase topTitle="New Shop Items" title="Fashion" categories="fashion" />
+		<!-- <ProductGridShowCase topTitle="New Shop Items" title="Fashion" categories="fashion" /> -->
+		<ProductGridShowCase />
 
 		{#if $page.data.store?.isCollections}
 			<!-- Collections Home -->

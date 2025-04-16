@@ -2,6 +2,7 @@ import { error } from '@sveltejs/kit'
 import { getMedusajsApi, postMedusajsApi } from '$lib/utils/server'
 import type { AllProducts, Product } from '$lib/types'
 import { mapMedusajsAllProducts, mapMedusajsProduct } from './medusa-utils'
+import { REGION_ID } from '.'
 
 // Search product
 
@@ -43,8 +44,11 @@ export const fetchProducts = async ({ origin, slug, id, server = false, sid = nu
 		res = mapMedusajsAllProducts(med)
 		return res || {}
 	} catch (e) {
+		// error(e.status, e.message)
+		console.log('Error in fetchProducts:', e);
+		console.log('Error response:', e.response);
 		error(e.status, e.message)
-	}
+	}	
 }
 
 // Fetch single product
@@ -52,11 +56,23 @@ export const fetchProducts = async ({ origin, slug, id, server = false, sid = nu
 export const fetchProduct = async ({ origin, slug, id, server = false, sid = null }: any) => {
 	try {
 		let res: Product | {} = {}
+
+		// it needs to be updated to return inventory number with its response
+
+		// const med = await getMedusajsApi(
+		// 	`products?handle=${slug}&expand=variants.prices&currency_code=eur`
+		// )
+
+		// const med = await getMedusajsApi(
+        //     `products?handle=${slug}&fields=status,*variants.calculated_price&region_id=${REGION_ID}`
+        // );
+
 		const med = await getMedusajsApi(
-			`products?handle=${slug}&expand=variants,variants.prices,images&currency_code=usd`
-		)
-		const productArray = med?.products || [] // fetch the products array value from the med variable
-		res = await mapMedusajsProduct(productArray[0]) // assuming we only want the first product in the array
+            `products?handle=${slug}&fields=*variants.calculated_price,*status&region_id=${REGION_ID}`
+        );
+
+		const productArray = med?.products || []
+		res = await mapMedusajsProduct(productArray[0]) 
 		return res || {}
 	} catch (e) {
 		error(e.status, e.message)

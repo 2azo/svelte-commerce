@@ -13,6 +13,7 @@ const cookies = Cookie()
 let today = dayjs(new Date()).toISOString()
 
 export let data: any = {}
+// console.log('data in routes/app/+page.svelte -> ', data)
 
 let seoProps = {
 	// addressCountry: 'India',

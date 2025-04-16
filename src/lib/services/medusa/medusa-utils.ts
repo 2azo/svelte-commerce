@@ -1,6 +1,7 @@
 import type { AllOrders, AllProducts, Category, Order, Product, Cart } from '$lib/types'
 
 export const mapMedusajsAllProducts = (p: any) => {
+	// console.log('p.products', p.products);
 	if (p) {
 		const allProd = {
 			count: p.count,
@@ -10,6 +11,7 @@ export const mapMedusajsAllProducts = (p: any) => {
 			data: p.products.map(mapMedusajsProduct),
 			facets: p.facets
 		}
+		
 		return allProd
 	} else {
 		return {}
@@ -17,6 +19,7 @@ export const mapMedusajsAllProducts = (p: any) => {
 }
 
 export const mapMedusajsProduct = (p: any) => {
+	// console.log('p', p);
 	if (p) {
 		const prod: Product = {
 			_id: p.id,
@@ -38,30 +41,31 @@ export const mapMedusajsProduct = (p: any) => {
 			variants: p.variants?.map((v) => ({
 				allow_backorder: v.allow_backorder,
 				barcode: v.barcode,
-				calculated_price: v.calculated_price / 100,
-				calculated_price_incl_tax: v.calculated_price_incl_tax / 100,
+				calculated_price: v.calculated_price,
+				calculated_price_incl_tax: v.calculated_price_incl_tax ,
 				calculated_price_type: v.calculated_price_type,
-				calculated_tax: v.calculated_tax / 100,
+				calculated_tax: v.calculated_tax,
 				created_at: v.created_at,
 				deleted_at: v.deleted_at,
 				ean: v.ean,
 				height: v.height,
 				hs_code: v.hs_code,
 				id: v.id,
-				inventory_quantity: v.inventory_quantity,
+				// inventory_quantity: v.inventory_quantity,
+				inventory_quantity: 100, // temporarily hardcoded to 100, api call update needed
 				length: v.length,
 				manage_inventory: v.manage_inventory,
 				material: v.material,
 				metadata: v.metadata,
 				mid_code: v.mid_code,
 				origin_country: v.origin_country,
-				original_price: v.original_price / 100,
-				original_price_incl_tax: v.original_price_incl_tax / 100,
-				original_tax: v.original_tax / 100,
+				original_price: v.original_price  ,
+				original_price_incl_tax: v.original_price_incl_tax  ,
+				original_tax: v.original_tax  ,
 				prices: v.prices,
 				product_id: v.product_id,
 				sku: v.sku,
-				tax_rates: v.tax_rates / 100,
+				tax_rates: v.tax_rates  ,
 				title: v.title,
 				upc: v.upc,
 				updated_at: v.updated_at,
@@ -74,7 +78,8 @@ export const mapMedusajsProduct = (p: any) => {
 			barcode: p.variants[0]?.barcode,
 			ean: p.variants[0]?.ean,
 			upc: p.variants[0]?.upc,
-			hasStock: p.variants[0]?.inventory_quantity,
+			// hasStock: p.variants[0]?.inventory_quantity,
+			hasStock: true, // temporarily hardcoded to true, api call update needed
 			// allow_backorder: p.variants[0]?.allow_backorder,
 			// manage_inventory: p.variants[0]?.manage_inventory,
 			hsn: p.variants[0]?.hs_code,
@@ -85,8 +90,9 @@ export const mapMedusajsProduct = (p: any) => {
 			height: p.variants[0]?.height,
 			width: p.variants[0]?.width,
 			length: p.variants[0]?.length,
-			price: p.variants[0]?.prices[0]?.amount / 100,
-			mrp: p.variants[0] && p.variants[0]?.original_price_incl_tax / 100,
+			// price: p.variants[0]?.prices[0]?.amount  ,
+			price: p.variants[0]?.calculated_price?.calculated_amount ? p.variants[0].calculated_price.calculated_amount : 1,
+			mrp: p.variants[0] && p.variants[0]?.original_price_incl_tax  ,
 			discount:
 				100 *
 				((p.variants[0]?.original_price_incl_tax - p.variants[0]?.calculated_price_incl_tax) /
@@ -120,6 +126,7 @@ export const mapMedusajsProduct = (p: any) => {
 			})
 			// sales_channels: p.sales_channels,
 		}
+		// console.log('p.variants[0]', p.variants[0]);
 		return prod
 	} else {
 		return {}
@@ -178,10 +185,10 @@ export const mapMedusajsOrder = (o: any) => {
 						name: i.title,
 						slug: i.handle,
 						img: i.thumbnail,
-						price: i.unit_price / 100,
-						total: i.total / 100,
-						subtotal: i.subtotal / 100,
-						tax: i.tax_total / 100,
+						price: i.unit_price  ,
+						total: i.total ,
+						subtotal: i.subtotal  ,
+						tax: i.tax_total  ,
 						qty: i.quantity
 					}
 			}),
@@ -216,16 +223,16 @@ export const mapMedusajsOrder = (o: any) => {
 						zip: a.postal_code
 					}
 			}),
-			paySuccess: o.paid_total / 100,
-			totalAmountRefunded: o.refunded_total / 100,
+			paySuccess: o.paid_total  ,
+			totalAmountRefunded: o.refunded_total  ,
 			amount: {
 				currency: o.currency_code,
 				discount: 100 * ((o.total - o.discount_total) / o.total),
 				qty: o.items.length,
-				shipping: o.shipping_total / 100,
-				subtotal: o.subtotal / 100,
-				tax: o.tax_total / 100,
-				total: o.total / 100
+				shipping: o.shipping_total  ,
+				subtotal: o.subtotal  ,
+				tax: o.tax_total  ,
+				total: o.total
 			},
 			items: o.items.map((i: any) => {
 				if (i)
@@ -235,10 +242,10 @@ export const mapMedusajsOrder = (o: any) => {
 						description: i.description,
 						name: i.title,
 						img: i.thumbnail,
-						price: i.unit_price / 100,
-						total: i.total / 100,
-						subtotal: i.subtotal / 100,
-						tax: i.tax_total / 100,
+						price: i.unit_price ,
+						total: i.total ,
+						subtotal: i.subtotal  ,
+						tax: i.tax_total  ,
 						qty: i.quantity
 					}
 			})
@@ -260,31 +267,31 @@ export const mapMedusajsCart = (c: any) => {
 			currencySymbol: null,
 			discount: {
 				code: null,
-				amount: c.discount_total / 100,
+				amount: c.discount_total  ,
 				formattedAmount: {
-					value: c.discount_total / 100,
+					value: c.discount_total  ,
 					currency: c.region.currency_code
 				}
 			},
 			formattedAmount: {
 				subtotal: {
-					value: c.subtotal / 100,
+					value: c.subtotal  ,
 					currency: c.region.currency_code
 				},
 				discount: {
-					value: c.discount_total / 100,
+					value: c.discount_total  ,
 					currency: c.region.currency_code
 				},
 				shipping: {
-					value: c.shipping_total / 100,
+					value: c.shipping_total  ,
 					currency: c.region.currency_code
 				},
 				tax: {
-					value: c.tax_total / 100,
+					value: c.tax_total  ,
 					currency: c.region.currency_code
 				},
 				total: {
-					value: c.total / 100,
+					value: c.total ,
 					currency: c.region.currency_code
 				}
 			},
@@ -298,20 +305,20 @@ export const mapMedusajsCart = (c: any) => {
 				sku: item.sku,
 				img: item.thumbnail,
 				qty: item.quantity,
-				price: item.unit_price / 100,
-				mrp: item.unit_price / 100,
+				price: item.unit_price  ,
+				mrp: item.unit_price  ,
 				discount: 0,
 				formattedItemAmount: {
-					price: c.region.currency_code.toUpperCase() + ' ' + item.unit_price / 100
+					price: c.region.currency_code.toUpperCase() + ' ' + item.unit_price 
 				}
 			})),
 			offer_total: null,
 			qty: c.items.reduce((total, item) => total + item.quantity, 0),
 			shipping: {
-				price: c.shipping_total / 100,
-				tax: c.shipping_tax_total / 100,
+				price: c.shipping_total  ,
+				tax: c.shipping_tax_total  ,
 				formattedPrice: {
-					value: c.shipping_total / 100,
+					value: c.shipping_total  ,
 					currency: c.region.currency_code
 				}
 			},
@@ -326,9 +333,9 @@ export const mapMedusajsCart = (c: any) => {
 			slug: c.handle,
 			store: null,
 			storeCurrency: c.region.currency_code,
-			subtotal: c.subtotal / 100,
-			tax: c.tax_total / 100,
-			total: c.total / 100,
+			subtotal: c.subtotal ,
+			tax: c.tax_total,
+			total: c.total ,
 			uid: c.customer_id,
 			// unavailableItems: [],
 			updatedAt: c.updated_at
