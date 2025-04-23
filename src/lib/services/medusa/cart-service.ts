@@ -235,24 +235,24 @@ export const removeFromCartService = async ({
             throw new Error('Missing cartId or line_id');
         }
         
-        // Remove 'store/' from the endpoint path - Medusa expects it without
         const endpoint = `carts/${cartId}/line-items/${line_id}`;
-        
-        console.log('Calling deleteMedusajsApi with:', {
-            endpoint,
-            sid
-        });
+        console.log('Calling deleteMedusajsApi with:', { endpoint, sid });
         
         const res_data = await deleteMedusajsApi(endpoint, sid);
         console.log('Medusa DELETE response:', res_data);
-		
-        if (!res_data?.cart) {
-            console.error('No cart in response:', res_data);
-            throw new Error('Invalid response from Medusa API');
+
+        let cart = res_data?.cart;
+        if (!cart) {
+
+            const cartRes = await getMedusajsApi(`carts/${cartId}`, {}, sid);
+            cart = cartRes?.cart;
+        }
+        if (!cart) {
+            console.error('No cart in response and unable to fetch cart:', res_data);
+            throw new Error('Unable to fetch cart after deletion');
         }
         
-        // Map the cart data before returning
-        const mappedCart = mapMedusajsCart(res_data.cart);
+        const mappedCart = mapMedusajsCart(cart);
         return mappedCart;
     } catch (e) {
         console.error('removeFromCartService error:', e);
