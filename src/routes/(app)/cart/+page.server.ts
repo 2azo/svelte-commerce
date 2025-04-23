@@ -151,6 +151,75 @@ const add: Action = async ({ request, cookies, locals }) => {
 	}
 }
 
+const remove: Action = async ({ request, cookies, locals }) => {
+	console.log('Remove action called');
+    const data = Object.fromEntries(await request.formData());
+    const line_id = data.line_id;
+    let cartId = locals.cartId;
+    let sid = cookies.get('connect.sid');
+
+    if (!line_id) {
+        return fail(400, { invalid: true });
+    }
+
+    try {
+		console.log('Calling removeFromCartService with:', { line_id, cartId, origin: locals.origin, sid, storeId: locals.storeId });
+
+        const cart = await CartService.removeFromCartService({
+            line_id,
+            cartId,
+            origin: locals.origin,
+            sid,
+            storeId: locals.storeId
+        });
+		console.log('Cart after remove:', cart);
+
+        if (cart) {
+            const cartObj = {
+				cartId: cart.cart_id,
+				id: cart.id ?? cart.cart_id,
+				cart_id: cart.cart_id,
+				uid: cart.uid ?? null,
+				store: cart.store ?? null,
+				active: cart.active ?? true,
+				createdAt: cart.createdAt ?? null,
+				updatedAt: cart.updatedAt ?? null,
+				billingAddress: cart.billingAddress ?? null,
+				shippingAddress: cart.shippingAddress ?? null,
+				needAddress: cart.needAddress ?? false,
+				needPrescription: cart.needPrescription ?? false,
+				codAvailable: cart.codAvailable ?? false,
+				slug: cart.slug ?? null,
+				storeCurrency: cart.storeCurrency ?? null,
+				offer_total: cart.offer_total ?? null,
+				sid: cart.sid ?? null,
+				currencySymbol: cart.currencySymbol,
+				currencyCode: cart.currencyCode ?? null,   // <-- add this
+				currencyName: cart.currencyName ?? null,   // <-- add this
+				discount: cart.discount,
+				formattedAmount: cart.formattedAmount,
+				items: cart.items,
+				qty: cart.qty,
+				savings: cart.savings,
+				selfTakeout: cart.selfTakeout,
+				shipping: cart.shipping,
+				subtotal: cart.subtotal,
+				tax: cart.tax,
+				total: cart.total,
+				unavailableItems: cart.unavailableItems
+			};
+            locals.cart = cartObj;
+            locals.cartId = cartObj.cartId;
+            return cartObj;
+        } else {
+            return {};
+        }
+    } catch (e) {
+        // console.log(e.status, e.body?.message);
+        throw e;
+    }
+};
+
 const createBackOrder: Action = async ({ request, cookies, locals }) => {
 	const data = await request.formData()
 	const pid = data.get('pid')
@@ -196,4 +265,4 @@ const handleUnavailableItems: Action = async ({ request, cookies, locals }) => {
 	return {}
 }
 
-export const actions: Actions = { add, createBackOrder, handleUnavailableItems }
+export const actions: Actions = { add, remove, createBackOrder, handleUnavailableItems }

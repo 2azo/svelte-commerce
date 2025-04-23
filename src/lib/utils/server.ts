@@ -279,7 +279,10 @@ export const deleteMedusajsApi = async (endpoint: string, sid?: any) => {
 		const response = await fetch(ep, {
 			method: 'DELETE',
 			credentials: 'include',
-			headers: { cookie: `connect.sid=${sid}` }
+			headers: {
+                Cookie: `connect.sid=${sid}`,
+                'x-publishable-api-key': 'pk_fd30032a2deebdebf93cec580fe0288a275d72ff64a016b217257fc0e0481221'
+            }
 		})
 		const isJson = response.headers.get('content-type')?.includes('application/json')
 		const res = isJson ? await response.json() : await response.text()
@@ -289,7 +292,7 @@ export const deleteMedusajsApi = async (endpoint: string, sid?: any) => {
 			return res
 		}
 	} catch (e) {
-		// console.log(`/lib/utils/server.ts delBySid(${HTTP_ENDPOINT + ' / api /' + endpoint})`, e)
+		console.log(`/lib/utils/server.ts delBySid(${MEDUSAJS_BASE_URL + '/' + endpoint})`, e)
 		throw e
 	}
 }

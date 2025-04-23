@@ -363,7 +363,10 @@ function handleGallery(index) {
 async function updateVariant(variant) {
 	$page.url.searchParams.set('variant', variant.id)
 	currentVariantId = variant.id
-	currentVariantPrice = (variant.prices[0]?.amount || currentVariantPrice) / 100
+	// console.log("variant -> ", variant)
+	// currentVariantPrice = (variant.prices[0]?.amount || currentVariantPrice) / 100
+	currentVariantPrice = (variant.calculated_price.calculated_amount)
+	console.log("currentVariantPrice -> ", currentVariantPrice)
 	await goto($page.url.toString())
 	await invalidateAll()
 }
@@ -944,6 +947,8 @@ async function updateVariant(variant) {
 
 							<ul class="flex flex-wrap gap-3" class:wiggle={wiggleVariants}>
 								{#each data?.product?.variants as v}
+								<!-- {console.log('Variant:', v.title, 'Inventory:', v.inventory_quantity)} -->
+
 									<li>
 										<button
 											type="button"
@@ -1404,7 +1409,9 @@ async function updateVariant(variant) {
 											}}>
 											<input type="hidden" name="pid" value={data?.product?._id || null} />
 
-											<input type="hidden" name="vid" value={data?.product?._id || null} />
+											<input type="hidden" name="vid" value={currentVariantId || null} />
+											<!-- {console.log('currentVariantId ->', currentVariantId)}	
+											{console.log('pid ->', data?.product?._id)} -->
 
 											<input
 												type="hidden"

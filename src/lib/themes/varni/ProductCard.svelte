@@ -82,7 +82,8 @@ function hideitems() {
 <div
 	class="relative col-span-1 flex flex-col items-center justify-center text-center w-full overflow-hidden sm:w-[200px] sm:shrink-0"
 	on:mouseenter="{showitems}"
-	on:mouseleave="{hideitems}">
+	on:mouseleave="{hideitems}"
+	role="group">
 	<!-- New and Tags -->
 
 	{#if newProduct.new || newProduct.tags?.length}

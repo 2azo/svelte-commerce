@@ -73,7 +73,7 @@ onMount(async () => {
 		selectedCartItemsStore.subscribe((value) => {
 			checkedCartItems = value
 		})
-		console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', cart)
+		console.log('cart in (app)/cart -> ', cart)
 	}
 
 	getProducts()
@@ -706,7 +706,7 @@ function updateCheckedCartItemsInGroup() {
 												<!-- Delete icon -->
 
 												<form
-													action="/cart?/add"
+													action="?/remove"
 													method="POST"
 													use:enhance="{() => {
 														selectedLoadingType = 'delete'
@@ -715,24 +715,12 @@ function updateCheckedCartItemsInGroup() {
 															fireGTagEvent('remove_from_cart', item)
 															updateCheckedCartItems(item.pid)
 															updateCartStore({ data: result?.data })
-															// await invalidateAll()
 															await applyAction(result)
 															selectedLoadingType = null
 															loading[ix] = false
 														}
 													}}">
-													<input type="hidden" name="line_id" value="{item.id || null}" />
-													<input type="hidden" name="pid" value="{item.pid || null}" />
-													<input type="hidden" name="vid" value="{item.vid || null}" />
-													<input type="hidden" name="qty" value="{-9999999}" />
-													<input
-														type="hidden"
-														name="customizedImg"
-														value="{item.customizedImg || null}" />
-													<input
-														type="hidden"
-														name="options"
-														value="{JSON.stringify(item.options) || null}" />
+													<input type="hidden" name="line_id" value="{item.id}" />
 
 													<button
 														type="submit"
