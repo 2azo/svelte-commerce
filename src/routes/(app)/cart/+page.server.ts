@@ -152,7 +152,7 @@ const add: Action = async ({ request, cookies, locals }) => {
 }
 
 const remove: Action = async ({ request, cookies, locals }) => {
-	console.log('Remove action called');
+	// console.log('Remove action called');
     const data = Object.fromEntries(await request.formData());
     const line_id = data.line_id;
     let cartId = locals.cartId;
@@ -163,7 +163,7 @@ const remove: Action = async ({ request, cookies, locals }) => {
     }
 
     try {
-		console.log('Calling removeFromCartService with:', { line_id, cartId, origin: locals.origin, sid, storeId: locals.storeId });
+		// console.log('Calling removeFromCartService with:', { line_id, cartId, origin: locals.origin, sid, storeId: locals.storeId });
 
         const cart = await CartService.removeFromCartService({
             line_id,
@@ -172,7 +172,7 @@ const remove: Action = async ({ request, cookies, locals }) => {
             sid,
             storeId: locals.storeId
         });
-		console.log('Cart after remove:', cart);
+		// console.log('Cart after remove:', cart);
 
         if (cart) {
             const cartObj = {

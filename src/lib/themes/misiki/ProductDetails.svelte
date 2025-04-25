@@ -366,7 +366,7 @@ async function updateVariant(variant) {
 	// console.log("variant -> ", variant)
 	// currentVariantPrice = (variant.prices[0]?.amount || currentVariantPrice) / 100
 	currentVariantPrice = (variant.calculated_price.calculated_amount)
-	console.log("currentVariantPrice -> ", currentVariantPrice)
+	// console.log("currentVariantPrice -> ", currentVariantPrice)
 	await goto($page.url.toString())
 	await invalidateAll()
 }

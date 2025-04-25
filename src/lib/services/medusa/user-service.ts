@@ -55,37 +55,70 @@ export const signupService = async ({
 }
 
 export const loginService = async ({
-	email,
+	handle,
 	password,
 	cartId = null,
 	storeId,
 	origin,
 	server = false,
 	sid = null
-}: any) => {
+  }: any) => {
 	try {
-		let res: any = {}
-		const response = await postMedusajsApi(`auth`, {
-			email,
-			password
-		})
-		res = response.customer
-		res.firstName = res.first_name
-		res.lastName = res.last_name
-		res.active = res.has_account
-		res.sid = response.sid
-		if (cartId) {
-			try {
-				await postMedusajsApi(`carts/${cartId}`, { customer_id: res?.id }, sid)
-			} catch (e) {}
+	  let res: any = {};
+  
+	  // Authenticate with wohnwert provider
+	  console.log("down are inputs for LoginService medusa/user-service.ts")
+	  console.log('handle, password, sid:', handle, password);
+	  const authResponse = await postMedusajsApi('auth/customer/wohnwert', {
+		handle,
+		password
+	  });
+	  console.log('Auth response:', authResponse);
+	  // Extract the token from the response
+	  const token = authResponse.token;
+	  if (!token) {
+		throw { status: 401, message: 'Authentication failed: No token returned' };
+	  }
+  
+	  // Use the token to fetch customer data
+	  const customerResponse = await fetch(`http://localhost:9000/store/customers/me`, {
+		method: 'GET',
+		headers: {
+		  'Authorization': `Bearer ${token}`,
+		  'x-publishable-api-key': 'pk_fd30032a2deebdebf93cec580fe0288a275d72ff64a016b217257fc0e0481221',
+		  'Content-Type': 'application/json'
 		}
+	  });
+	  console.log('Customer response status:', customerResponse.status);
 
-		return res
+	  const customerData = await customerResponse.json();
+	  if (customerResponse.status > 399) {
+		throw { status: customerResponse.status, message: customerData.message || 'Failed to retrieve customer data' };
+	  }
+  
+	  // Map customer data to expected format
+	  res = customerData.customer || {};
+	  res.firstName = res.first_name || '';
+	  res.lastName = res.last_name || '';
+	  res.active = res.has_account || false;
+	  res.token = token; // Include the token in the response for frontend use
+  
+	  // Update cart with customer ID if provided
+	  if (cartId && res?.id) {
+		try {
+		  await postMedusajsApi(`carts/${cartId}`, { customer_id: res.id }, null, token);
+		} catch (e) {
+		  console.log('Failed to update cart with customer_id:', e);
+		}
+	  }
+  
+	  return res;
 	} catch (e) {
-		if (e.status === 401) e.message = 'email or password is invalid'
-		error(e.status, e.message)
+	  if (e.status === 401) e.message = 'Handle or password is invalid';
+	  throw { status: e.status || 500, message: e.message || 'Login failed' };
 	}
-}
+  };
+
 
 export const forgotPasswordService = async ({
 	email,

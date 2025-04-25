@@ -73,7 +73,7 @@ onMount(async () => {
 		selectedCartItemsStore.subscribe((value) => {
 			checkedCartItems = value
 		})
-		console.log('cart in (app)/cart -> ', cart)
+		// console.log('cart in (app)/cart -> ', cart)
 	}
 
 	getProducts()

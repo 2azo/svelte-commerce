@@ -215,7 +215,7 @@ function changeNumber() {
 					{#if isMobile}
 						Mobile number
 					{:else if isEmail}
-						Email address
+						Wohnwert Backoffice Handle
 					{:else}
 						Email or mobile number
 					{/if}

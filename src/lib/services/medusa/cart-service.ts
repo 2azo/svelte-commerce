@@ -236,10 +236,10 @@ export const removeFromCartService = async ({
         }
         
         const endpoint = `carts/${cartId}/line-items/${line_id}`;
-        console.log('Calling deleteMedusajsApi with:', { endpoint, sid });
+        // console.log('Calling deleteMedusajsApi with:', { endpoint, sid });
         
         const res_data = await deleteMedusajsApi(endpoint, sid);
-        console.log('Medusa DELETE response:', res_data);
+        // console.log('Medusa DELETE response:', res_data);
 
         let cart = res_data?.cart;
         if (!cart) {

@@ -4,7 +4,7 @@ import {
 	HTTP_ENDPOINT,
 	// bigcommerceHeaders,
 	// woocommerceHeaders,
-	MEDUSAJS_BASE_URL,
+	MEDUSAJS_BASE_URL
 	// SHOPIFY_BASE_URL
 } from '../config'
 
@@ -203,49 +203,62 @@ export const postBigCommerceApi = async (endpoint: string, query: any, sid?: any
 // ---------------------------------- X ----------------------------------
 
 export const getMedusajsApi = async (endpoint: string, query?: any, sid?: any) => {
-    try {
-        const fullUrl = `${MEDUSAJS_BASE_URL}/${endpoint}`;
-        // console.log('Requesting URL:', fullUrl); // Log the URL
-        const response = await fetch(fullUrl, {
-            method: 'GET',
-            credentials: 'include',    
-            headers: {
-                Cookie: `connect.sid=${sid}`,
-                'x-publishable-api-key': 'pk_fd30032a2deebdebf93cec580fe0288a275d72ff64a016b217257fc0e0481221'
-            }
-        });
-        // console.log('Response Status:', response.status); // Log the status
-
-        const isJson = response.headers.get('content-type')?.includes('application/json');
-        const res = await response.text(); // Always get text first
-        // console.log('Response Body:', res); // Log the raw response
-
-        if (response.status >= 400) {
-            throw { status: response.status, message: res };
-        }
-        return isJson ? JSON.parse(res) : res; // Parse JSON only if applicable
-    } catch (e) {
-        console.log('Error in getMedusajsApi:', e); // Improved error logging
-        throw e;
-    }
-};
-
-export const postMedusajsApi = async (endpoint: string, data: any, sid?: any) => {
 	try {
-		const ep = MEDUSAJS_BASE_URL + '/' + endpoint
+		const fullUrl = `${MEDUSAJS_BASE_URL}/${endpoint}`
+		console.log('Requesting URL:', fullUrl) // Log the URL
+		const response = await fetch(fullUrl, {
+			method: 'GET',
+			credentials: 'include',
+			headers: {
+				Cookie: `connect.sid=${sid}`,
+				'x-publishable-api-key':
+					'pk_fd30032a2deebdebf93cec580fe0288a275d72ff64a016b217257fc0e0481221'
+			}
+		})
+		// console.log('Response Status:', response.status); // Log the status
 
+		const isJson = response.headers.get('content-type')?.includes('application/json')
+		const res = await response.text() // Always get text first
+		// console.log('Response Body:', res); // Log the raw response
+
+		if (response.status >= 400) {
+			throw { status: response.status, message: res }
+		}
+		return isJson ? JSON.parse(res) : res // Parse JSON only if applicable
+	} catch (e) {
+		console.log('Error in getMedusajsApi:', e) // Improved error logging
+		throw e
+	}
+}
+
+export const postMedusajsApi = async (endpoint: string, data: any, sid?: any, token?: string) => {
+	try {
+		console.log('inside postMedusajsApi')
+
+		const ep = MEDUSAJS_BASE_URL + '/' + endpoint;
+		// console.log('Requesting URL (ep):', ep);
+		// this is just for login auth
+		// const ep = 'http://localhost:9000/auth/customer/wohnwert'
+
+		const headers: Record<string, string> = {
+			'Content-Type': 'application/json',
+			'x-publishable-api-key': 'pk_fd30032a2deebdebf93cec580fe0288a275d72ff64a016b217257fc0e0481221'
+		}
+
+		if (sid) {
+			headers['Cookie'] = `connect.sid=${sid}`
+		}
+		if (token) {
+			headers['Authorization'] = `Bearer ${token}`
+		}
+		console.log('Request Headers:', headers)
 		const response = await fetch(ep, {
 			method: 'POST',
 			credentials: 'include',
 			body: JSON.stringify(data || {}),
-			headers: {
-				'Content-Type': 'application/json',
-				Cookie: `connect.sid=${sid}`,
-				'x-publishable-api-key': 'pk_fd30032a2deebdebf93cec580fe0288a275d72ff64a016b217257fc0e0481221'
-			}
+			headers
 		})
-		// const allHeaders = Object.fromEntries(response.headers.entries())
-		// console.log(allHeaders)
+
 		const isJson = response.headers.get('content-type')?.includes('application/json')
 		const res = isJson ? await response.json() : await response.text()
 		if (response.status > 399) {
@@ -268,7 +281,6 @@ export const postMedusajsApi = async (endpoint: string, data: any, sid?: any) =>
 			return res
 		}
 	} catch (e) {
-		// console.log(`/lib/utils/server.ts postMedusajsApi(${HTTP_ENDPOINT + ' / api /' + endpoint})`, e)
 		throw e
 	}
 }
@@ -280,9 +292,10 @@ export const deleteMedusajsApi = async (endpoint: string, sid?: any) => {
 			method: 'DELETE',
 			credentials: 'include',
 			headers: {
-                Cookie: `connect.sid=${sid}`,
-                'x-publishable-api-key': 'pk_fd30032a2deebdebf93cec580fe0288a275d72ff64a016b217257fc0e0481221'
-            }
+				Cookie: `connect.sid=${sid}`,
+				'x-publishable-api-key':
+					'pk_fd30032a2deebdebf93cec580fe0288a275d72ff64a016b217257fc0e0481221'
+			}
 		})
 		const isJson = response.headers.get('content-type')?.includes('application/json')
 		const res = isJson ? await response.json() : await response.text()

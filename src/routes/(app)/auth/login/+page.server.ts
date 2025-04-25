@@ -17,75 +17,67 @@ const zodPhoneLoginSchema = z.object({
 })
 
 const login = async ({ request, cookies, locals }) => {
-	const data = await request.formData()
-	const isEmail = data.get('isEmail')
-	const phoneOrEmail = data.get('phoneOrEmail')
-	const password = data.get('password')
-	let res
-
+	const data = await request.formData();
+	const isEmail = data.get('isEmail');
+	const phoneOrEmail = data.get('phoneOrEmail');
+	const password = data.get('password');
+	let res;
+  
 	if (isEmail == 'true') {
-		const formData = {
-			email: phoneOrEmail,
-			password: password
-		}
-
-		try {
-			zodEmailLoginSchema.parse(formData)
-		} catch (err) {
-			const { fieldErrors: errors } = err.flatten()
-			const { ...rest } = formData
-			error(404, {
-				data: rest,
-				errors
-			})
-		}
-
-		try {
-			res = await UserService.loginService({
-				email: phoneOrEmail,
-				password: password,
-				storeId: locals.storeId,
-				cartId: locals.cartId,
-				server: true,
-				origin: locals.origin
-			})
-		} catch (e) {
-			error(401, e.message)
-		}
-		// const updatedCart = await CartService.updateCart({
-		// 	customer_id: res.customer_id
-		// })
+	  try {
+		console.log('down are inputs for LoginService', isEmail);
+		console.log('phoneOrEmail', phoneOrEmail);
+		console.log('password', password);
+		console.log('locals.cartId', locals.cartId);
+		console.log('locals.storeId', locals.storeId);
+		console.log('locals.origin', locals.origin);
+		console.log('cookies.get(connect.sid)', cookies.get('connect.sid'));
+		res = await UserService.loginService({
+		  handle: phoneOrEmail,
+		  password: password,
+		  cartId: locals.cartId,
+		  storeId: locals.storeId,
+		  origin: locals.origin,
+		  server: true,
+		//   sid: cookies.get('connect.sid')
+		});
+	  } catch (e) {
+		console.log('Error from login:', e);
+		throw error(e.status || 401, e.message || 'Login failed');
+	  }
 	} else {
-		const formData = {
-			phone: phoneOrEmail
-		}
-
-		try {
-			zodPhoneLoginSchema.parse(formData)
-		} catch (err) {
-			const { fieldErrors: errors } = err.flatten()
-			const { ...rest } = formData
-			error(404, {
-				data: rest,
-				errors
-			})
-		}
-		try {
-			res = await UserService.getOtpService({
-				phone: phoneOrEmail,
-				storeId: locals.storeId,
-				server: true,
-				origin: locals.origin
-			})
-		} catch (e) {
-			error(401, e.message)
-		}
+	  const formData = { phone: phoneOrEmail };
+	  try {
+		zodPhoneLoginSchema.parse(formData);
+	  } catch (err) {
+		const { fieldErrors: errors } = err.flatten();
+		const { ...rest } = formData;
+		throw error(404, { data: rest, errors });
+	  }
+	  try {
+		res = await UserService.getOtpService({
+		  phone: phoneOrEmail,
+		  storeId: locals.storeId,
+		  server: true,
+		  origin: locals.origin
+		});
+	  } catch (e) {
+		throw error(401, e.message);
+	  }
 	}
-
-	cookies.set('connect.sid', res.sid, { path: '/' })
-
-	return res
-}
+  
+	// Store the token in a cookie for frontend use
+	if (res.token) {
+	  cookies.set('auth_token', res.token, { path: '/', httpOnly: true, secure: true });
+	}
+  
+	// Optional: Set connect.sid if present (though not needed for token-based auth)
+	if (res.sid) {
+	  cookies.set('connect.sid', res.sid, { path: '/', httpOnly: true, secure: true });
+	}
+  
+	return res;
+  };
 
 const verifyOtp = async ({ cookies, request, locals, url }) => {
 	const data = await request.formData()
