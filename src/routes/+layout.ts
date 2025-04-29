@@ -3,6 +3,9 @@ import { error } from '@sveltejs/kit'
 
 export const prerender = false
 export const load = async ({ parent, data, fetch, url }) => {
+	console.log('#############################')
+	console.log("data -> ",data)
+	console.log('#############################')
 	await parent()
 	try {
 		const res2 = await fetch('/server/store')

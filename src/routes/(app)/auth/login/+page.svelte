@@ -27,14 +27,14 @@ const seoProps = {
 	description: 'Login with email/phone'
 }
 
-let email = IS_DEV ? 'demo@litekart.in' : $page?.url?.searchParams.get('email')
+let email = IS_DEV ? 'ww1001' : $page?.url?.searchParams.get('email')
 let err
 let isEmail = false
 let isMobile = false
 let loading = false
 let maxlength = null
 let otpRequestSend = false
-let password = IS_DEV ? 'litekart' : ''
+let password = IS_DEV ? 'test' : ''
 let phone = IS_DEV ? '+918249028220' : ''
 let ref = $page?.url?.searchParams.get('ref')
 let resendAfter = 0

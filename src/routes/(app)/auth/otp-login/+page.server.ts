@@ -61,7 +61,8 @@ const verifyOtp: Action = async ({ cookies, request, locals }) => {
 			role: user.role,
 			verified: user.verified,
 			active: user.active,
-			store: user.store
+			store: user.store,
+								test: 'test'
 		}
 
 		cookies.set('me', JSON.stringify(me), {

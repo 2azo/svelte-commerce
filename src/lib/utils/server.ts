@@ -202,65 +202,125 @@ export const postBigCommerceApi = async (endpoint: string, query: any, sid?: any
 
 // ---------------------------------- X ----------------------------------
 
-export const getMedusajsApi = async (endpoint: string, query?: any, sid?: any) => {
-	try {
-		const fullUrl = `${MEDUSAJS_BASE_URL}/${endpoint}`
-		console.log('Requesting URL:', fullUrl) // Log the URL
-		const response = await fetch(fullUrl, {
-			method: 'GET',
-			credentials: 'include',
-			headers: {
-				Cookie: `connect.sid=${sid}`,
-				'x-publishable-api-key':
-					'pk_fd30032a2deebdebf93cec580fe0288a275d72ff64a016b217257fc0e0481221'
-			}
-		})
-		// console.log('Response Status:', response.status); // Log the status
+// export const getMedusajsApi = async (endpoint: string, query?: any, sid?: any) => {
+//     try {
+//         const fullUrl = `${MEDUSAJS_BASE_URL}/${endpoint}`;
+//         // console.log('Requesting URL:', fullUrl); // Log the URL
+// 		console.log('sid -> ', sid)
+//         const response = await fetch(fullUrl, {
+//             method: 'GET',
+//             credentials: 'include',    
+//             headers: {
+//                 Cookie: `connect.sid=${sid}`,
+//                 'x-publishable-api-key': 'pk_fd30032a2deebdebf93cec580fe0288a275d72ff64a016b217257fc0e0481221'
+//             }
+//         });
+//         console.log('Response Status:', response.status); // Log the status
 
-		const isJson = response.headers.get('content-type')?.includes('application/json')
-		const res = await response.text() // Always get text first
-		// console.log('Response Body:', res); // Log the raw response
+//         const isJson = response.headers.get('content-type')?.includes('application/json');
+//         const res = await response.text(); // Always get text first
+//         // console.log('Response Body:', res); // Log the raw response
 
-		if (response.status >= 400) {
-			throw { status: response.status, message: res }
-		}
-		return isJson ? JSON.parse(res) : res // Parse JSON only if applicable
-	} catch (e) {
-		console.log('Error in getMedusajsApi:', e) // Improved error logging
-		throw e
-	}
+//         if (response.status >= 400) {
+//             throw { status: response.status, message: res };
+//         }
+//         return isJson ? JSON.parse(res) : res; // Parse JSON only if applicable
+//     } catch (e) {
+//         console.log('Error in getMedusajsApi:', e); // Improved error logging
+//         throw e;
+//     }
+// };
+
+export const getMedusajsApi = async (endpoint: string, query?: any, token?: any, sid?: any) => {
+	console.log("inside getMedusajsApi")
+  try {
+    const fullUrl = `${MEDUSAJS_BASE_URL}/${endpoint}`
+    console.log('Requesting URL:', fullUrl)
+    
+    // Prepare headers - using Bearer token like in your curl example
+    const headers: Record<string, string> = {
+      'x-publishable-api-key': 'pk_fd30032a2deebdebf93cec580fe0288a275d72ff64a016b217257fc0e0481221'
+    }
+    
+    // Add Authorization header if token exists
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`
+    }
+
+	// Add session cookie if sid exists
+    if (sid) {
+		headers['Cookie'] = `connect.sid=${sid}`;
+	  }
+
+	const response = await fetch(fullUrl, {
+		method: 'GET',
+		headers,
+		credentials: sid ? 'include' : undefined
+	  });
+
+    console.log('Response Status:', response.status)
+    
+    const isJson = response.headers.get('content-type')?.includes('application/json')
+    const res = await response.text()
+    
+    if (response.status >= 400) {
+      throw { status: response.status, message: res }
+    }
+    
+    return isJson ? JSON.parse(res) : res
+  } catch (e) {
+    console.log('Error in getMedusajsApi:', e)
+    throw e
+  }
 }
 
-export const postMedusajsApi = async (endpoint: string, data: any, sid?: any, token?: string) => {
+export const postMedusajsApi = async (
+	endpoint: string,
+	data: any,
+	options: {
+	  sid?: string;
+	  token?: string;
+	  isAuth?: boolean;
+	} = { isAuth: false }
+  ) => {
 	try {
 		console.log('inside postMedusajsApi')
 
-		const ep = MEDUSAJS_BASE_URL + '/' + endpoint;
-		// console.log('Requesting URL (ep):', ep);
-		// this is just for login auth
-		// const ep = 'http://localhost:9000/auth/customer/wohnwert'
+		let ep = ''
+		if (options?.isAuth) {
+			// this is just for customer login
+			console.log('isAuth is true')
+			ep = 'http://localhost:9000/auth/customer/wohnwert'
+		} else {
+			// MEDUSAJS_BASE_URL = http://localhost:9000/store
+			console.log('isAuth is false')
+			ep = MEDUSAJS_BASE_URL + '/' + endpoint
+		}
 
 		const headers: Record<string, string> = {
 			'Content-Type': 'application/json',
 			'x-publishable-api-key': 'pk_fd30032a2deebdebf93cec580fe0288a275d72ff64a016b217257fc0e0481221'
 		}
 
-		if (sid) {
-			headers['Cookie'] = `connect.sid=${sid}`
+		if (options?.sid) {
+			headers['Cookie'] = `connect.sid=${options?.sid}`
 		}
-		if (token) {
-			headers['Authorization'] = `Bearer ${token}`
+		if (options?.token) {
+			headers['Authorization'] = `Bearer ${options?.token}`
 		}
 		console.log('Request Headers:', headers)
+		console.log('before fetching from -> ', ep)
 		const response = await fetch(ep, {
 			method: 'POST',
 			credentials: 'include',
 			body: JSON.stringify(data || {}),
 			headers
 		})
-
+		console.log('after fetching')
+		console.log('response -> ', response)
 		const isJson = response.headers.get('content-type')?.includes('application/json')
 		const res = isJson ? await response.json() : await response.text()
+		console.log("res -> ", res)
 		if (response.status > 399) {
 			let message = res.message
 			if (message == 'null') {

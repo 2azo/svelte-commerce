@@ -16,6 +16,7 @@ export async function load({ locals, url }) {
 			storeId
 		})
 
+		console.log("inside src/routes/(app)/my/addresses/+page.server.ts")
 		const { myAddresses, count } = await AddressService.fetchAddresses({
 			origin,
 			sid,

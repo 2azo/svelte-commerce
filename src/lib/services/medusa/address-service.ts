@@ -1,19 +1,25 @@
 import { deleteMedusajsApi, getMedusajsApi, postMedusajsApi } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 
-export const fetchAddresses = async ({ origin, storeId, server = false, sid }: any) => {
+export const fetchAddresses = async ({ origin, storeId, server = false, sid, token }: any) => {
 	try {
 		let res: any = {}
 		let selectedAddress = {}
 		let myAddresses = []
 
-		res = await getMedusajsApi(`customers/me`, {}, sid)
+		console.log('before fetch in fetchAddresses sid', sid)
+
+		// res = await getMedusajsApi(`customers/me`, {}, sid)
+		// res = await getMedusajsApi('customers/me', null, { sid, token });
+		res = await getMedusajsApi('customers/me', null, token, sid);
+		console.log("res in fetchAddresses", res)
 		myAddresses = res?.customer?.shipping_addresses
 		myAddresses.sort((a, b) => {
 			const da = new Date(a.updated_at),
 				db = new Date(b.updated_at)
 			return db - da
 		})
+		console.log("after fetch in fetchAddresses", myAddresses)
 
 		myAddresses = myAddresses.map((add) => {
 			return {

@@ -4,7 +4,16 @@ import { AddressService, CartService, CountryService } from '$lib/services'
 export const prerender = false
 
 export async function load({ url, parent }) {
-	const { me, sid, store, storeId, origin, cartId } = await parent()
+	const { me, sid, store, storeId, origin, cartId, token} = await parent()
+
+	console.log('inside +page.server.ts, loaded data')
+	console.log('me -> ', me)
+	console.log('sid -> ', sid)
+	console.log('store -> ', store)
+	console.log('storeId -> ', storeId)
+	console.log('origin -> ', origin)
+	console.log('cartId -> ', cartId)
+	console.log('last man standing token -> ', token)
 
 	try {
 		const currentPage = +url.searchParams.get('page') || 1
@@ -31,10 +40,15 @@ export async function load({ url, parent }) {
 
 		if (store?.isGuestCheckout) {
 			if (me) {
+				console.log("inside fetchAddresses linke 34, fetch inputs")
+				console.log('storeId', storeId)
+				console.log('origin', origin)
+				console.log('sid', sid)
 				const { myAddresses, preSelectedAddress } = await AddressService.fetchAddresses({
 					storeId,
 					origin,
-					sid
+					sid,
+					token 
 				})
 
 				return {
@@ -61,10 +75,13 @@ export async function load({ url, parent }) {
 			if (!me) {
 				redirect(307, `/auth/login?ref=${url?.pathname}`)
 			} else {
+				console.log("inside fetchAddresses linke 68, fetch inputs")
+
 				const { myAddresses, preSelectedAddress } = await AddressService.fetchAddresses({
 					storeId,
 					origin,
-					sid
+					sid,
+					token
 				})
 
 				return {
