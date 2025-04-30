@@ -209,7 +209,7 @@ export const postBigCommerceApi = async (endpoint: string, query: any, sid?: any
 // 		console.log('sid -> ', sid)
 //         const response = await fetch(fullUrl, {
 //             method: 'GET',
-//             credentials: 'include',    
+//             credentials: 'include',
 //             headers: {
 //                 Cookie: `connect.sid=${sid}`,
 //                 'x-publishable-api-key': 'pk_fd30032a2deebdebf93cec580fe0288a275d72ff64a016b217257fc0e0481221'
@@ -232,57 +232,88 @@ export const postBigCommerceApi = async (endpoint: string, query: any, sid?: any
 // };
 
 export const getMedusajsApi = async (endpoint: string, query?: any, token?: any, sid?: any) => {
-	console.log("inside getMedusajsApi")
-  try {
-    const fullUrl = `${MEDUSAJS_BASE_URL}/${endpoint}`
-    console.log('Requesting URL:', fullUrl)
-    
-    // Prepare headers - using Bearer token like in your curl example
-    const headers: Record<string, string> = {
-      'x-publishable-api-key': 'pk_fd30032a2deebdebf93cec580fe0288a275d72ff64a016b217257fc0e0481221'
-    }
-    
-    // Add Authorization header if token exists
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`
-    }
+	console.log('inside getMedusajsApi')
+	try {
+		const fullUrl = `${MEDUSAJS_BASE_URL}/${endpoint}`
+		console.log('Requesting URL:', fullUrl)
 
-	// Add session cookie if sid exists
-    if (sid) {
-		headers['Cookie'] = `connect.sid=${sid}`;
-	  }
+		// Prepare headers - using Bearer token like in your curl example
+		const headers: Record<string, string> = {
+			'x-publishable-api-key': 'pk_fd30032a2deebdebf93cec580fe0288a275d72ff64a016b217257fc0e0481221'
+		}
 
-	const response = await fetch(fullUrl, {
-		method: 'GET',
-		headers,
-		credentials: sid ? 'include' : undefined
-	  });
+		// Add Authorization header if token exists
+		if (token) {
+			headers['Authorization'] = `Bearer ${token}`
+		}
 
-    console.log('Response Status:', response.status)
-    
-    const isJson = response.headers.get('content-type')?.includes('application/json')
-    const res = await response.text()
-    
-    if (response.status >= 400) {
-      throw { status: response.status, message: res }
-    }
-    
-    return isJson ? JSON.parse(res) : res
-  } catch (e) {
-    console.log('Error in getMedusajsApi:', e)
-    throw e
-  }
+		// Add session cookie if sid exists
+		if (sid) {
+			headers['Cookie'] = `connect.sid=${sid}`
+		}
+
+		const response = await fetch(fullUrl, {
+			method: 'GET',
+			headers,
+			credentials: sid ? 'include' : undefined
+		})
+
+		console.log('Response Status:', response.status)
+
+		const isJson = response.headers.get('content-type')?.includes('application/json')
+		const res = await response.text()
+
+		if (response.status >= 400) {
+			throw { status: response.status, message: res }
+		}
+
+		return isJson ? JSON.parse(res) : res
+	} catch (e) {
+		console.log('Error in getMedusajsApi:', e)
+		throw e
+	}
 }
+
+// // test
+// // Function to add an address for a customer
+// export const addCustomerAddress = async (addressData, token) => {
+// 	try {
+// 		const fullUrl = `${MEDUSAJS_BASE_URL}/customers/me/addresses`
+
+// 		const response = await fetch(fullUrl, {
+// 			method: 'POST',
+// 			headers: {
+// 				'Content-Type': 'application/json',
+// 				Authorization: `Bearer ${token}`,
+// 				'x-publishable-api-key':
+// 					'pk_fd30032a2deebdebf93cec580fe0288a275d72ff64a016b217257fc0e0481221'
+// 			},
+// 			body: JSON.stringify(addressData)
+// 		})
+
+// 		const isJson = response.headers.get('content-type')?.includes('application/json')
+// 		const res = await response.text()
+
+// 		if (response.status >= 400) {
+// 			throw { status: response.status, message: res }
+// 		}
+
+// 		return isJson ? JSON.parse(res) : res
+// 	} catch (e) {
+// 		console.log('Error in addCustomerAddress:', e)
+// 		throw e
+// 	}
+// }
 
 export const postMedusajsApi = async (
 	endpoint: string,
 	data: any,
 	options: {
-	  sid?: string;
-	  token?: string;
-	  isAuth?: boolean;
+		sid?: string
+		token?: string
+		isAuth?: boolean
 	} = { isAuth: false }
-  ) => {
+) => {
 	try {
 		console.log('inside postMedusajsApi')
 
@@ -320,7 +351,7 @@ export const postMedusajsApi = async (
 		console.log('response -> ', response)
 		const isJson = response.headers.get('content-type')?.includes('application/json')
 		const res = isJson ? await response.json() : await response.text()
-		console.log("res -> ", res)
+		console.log('res -> ', res)
 		if (response.status > 399) {
 			let message = res.message
 			if (message == 'null') {

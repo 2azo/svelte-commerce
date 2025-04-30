@@ -67,7 +67,7 @@ export const loginService = async ({
 	try {
 		let res: any = {}
 
-		// Step 1: Authenticate or create customer with wohnwert provider
+		// Authenticate or create customer with wohnwert provider
 		const authResponse = await postMedusajsApi(
 			'auth/customer/wohnwert',
 			{
@@ -86,7 +86,7 @@ export const loginService = async ({
 			throw { status: 401, message: 'Authentication failed: No token returned' }
 		}
 
-		// Step 2: Refresh the token to ensure customer data is included
+		// Refresh the token to ensure customer data is included
 		try {
 			const refreshResponse = await fetch('http://localhost:9000/auth/token/refresh', {
 				method: 'POST',
@@ -108,7 +108,7 @@ export const loginService = async ({
 			console.warn('Error during token refresh:', e.message)
 		}
 
-		// Step 3: Use the token to fetch customer data
+		// Use the token to fetch customer data
 		const customerResponse = await fetch('http://localhost:9000/store/customers/me', {
 			method: 'GET',
 			headers: {
@@ -121,6 +121,7 @@ export const loginService = async ({
 		console.log('Customer response status:', customerResponse.status)
 
 		const customerData = await customerResponse.json()
+		console.log('Customer data --> ', customerData)
 		if (customerResponse.status > 399) {
 			throw {
 				status: customerResponse.status,
@@ -133,9 +134,9 @@ export const loginService = async ({
 		res.firstName = res.first_name || ''
 		res.lastName = res.last_name || ''
 		res.active = res.has_account || false
-		res.token = token // Include the latest token in the response
+		res.token = token 
 
-		// Step 4: Create or update cart with customer ID
+		// Create or update cart with customer ID
 		if (!cartId && res?.id) {
 			try {
 				const cartResponse = await postMedusajsApi('carts', {}, { token })
@@ -158,7 +159,7 @@ export const loginService = async ({
 			}
 		}
 
-		res.cartId = cartId // Include cartId in response for frontend/server use
+		res.cartId = cartId 
 		return res
 	} catch (e) {
 		if (e.status === 401) e.message = 'Handle or password is invalid'

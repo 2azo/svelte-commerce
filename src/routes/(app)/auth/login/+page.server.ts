@@ -23,6 +23,10 @@ const login = async ({ request, cookies, locals }) => {
 	const password = data.get('password')
 	let res
 
+	const handle = phoneOrEmail
+
+	console.log('handle - >', handle)
+
 	if (isEmail == 'true') {
 		try {
 			console.log('down are inputs for LoginService', isEmail)
@@ -33,7 +37,7 @@ const login = async ({ request, cookies, locals }) => {
 			console.log('locals.origin', locals.origin)
 			console.log('cookies.get(connect.sid)', cookies.get('connect.sid'))
 			res = await UserService.loginService({
-				handle: phoneOrEmail,
+				handle: handle,
 				password: password,
 				cartId: locals.cartId,
 				storeId: locals.storeId,
@@ -68,13 +72,60 @@ const login = async ({ request, cookies, locals }) => {
 
 	// Store the token in a cookie for frontend use
 	if (res.token) {
+		console.log('1- res.token', res.token)
 		cookies.set('auth_token', res.token, { path: '/', httpOnly: true, secure: true })
 	}
 
 	// Optional: Set connect.sid if present (though not needed for token-based auth)
 	if (res.sid) {
+		console.log('2- res.sid', res.sid)
 		cookies.set('connect.sid', res.sid, { path: '/', httpOnly: true, secure: true })
 	}
+
+	console.log('3- res', res)
+
+	// creating addresses
+
+	const postAddress = async (addressData) => {
+		try {
+			const response = await fetch('http://localhost:9000/store/customers/me/addresses', {
+				method: 'POST',
+				headers: {
+					Authorization: `Bearer ${res.token}`,
+					'Content-Type': 'application/json',
+					'x-publishable-api-key':
+						'pk_fd30032a2deebdebf93cec580fe0288a275d72ff64a016b217257fc0e0481221'
+				},
+				body: JSON.stringify(addressData)
+			})
+
+			if (!response.ok) {
+				const errorData = await response.json()
+				console.error('Address creation failed:', errorData)
+			} else {
+				const result = await response.json()
+				console.log('Address successfully created:', result)
+			}
+		} catch (err) {
+			console.error('Network or server error while creating address:', err)
+		}
+	}
+
+	const address = {
+		metadata: {},
+		first_name: res.firstName,
+		last_name: res.lastName,
+		phone: res.phone,
+		company: res.company_name,
+		address_1: res.metadata.user.street || '',
+		address_2: '',
+		city: res.metadata.user.privCity || '',
+		country_code: 'de', // germany, for now
+		postal_code: res.metadata.user.privPostcode || '',
+		address_name: `${res.firstName} ${res.lastName} Address`
+	}
+
+	postAddress(address)
 
 	return res
 }

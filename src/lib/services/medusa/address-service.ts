@@ -13,13 +13,14 @@ export const fetchAddresses = async ({ origin, storeId, server = false, sid, tok
 		// res = await getMedusajsApi('customers/me', null, { sid, token });
 		res = await getMedusajsApi('customers/me', null, token, sid);
 		console.log("res in fetchAddresses", res)
-		myAddresses = res?.customer?.shipping_addresses
+		// myAddresses = res?.customer?.shipping_addresses
+		myAddresses = res?.customer?.addresses
 		myAddresses.sort((a, b) => {
 			const da = new Date(a.updated_at),
 				db = new Date(b.updated_at)
 			return db - da
 		})
-		console.log("after fetch in fetchAddresses", myAddresses)
+		console.log("myAddresses after fetch in fetchAddresses", myAddresses)
 
 		myAddresses = myAddresses.map((add) => {
 			return {
