@@ -26,7 +26,8 @@ import whatsappIcon from '$lib/assets/social-media/whatsapp.png'
 import { Toaster } from 'svelte-sonner'
 
 export let data
-// console.log('data', data);
+console.log('data start');
+console.log('data', data);
 
 $: innerWidth = 0
 // $: isAndroid = false
@@ -81,23 +82,23 @@ onMount(async () => {
 
 <svelte:window bind:innerWidth />
 <main style="font-family: {customfont};">
-	{#if store?.googleAnalytics?.active}
+	<!-- {#if store?.googleAnalytics?.active}
 		<GoogleAnalytics properties="{[store?.googleAnalytics.id.val]}" />
 
-		<!-- <GoogleAnalytics googleAnalyticsId="{store?.googleAnalytics.id}" /> -->
-	{/if}
+		<GoogleAnalytics googleAnalyticsId="{store?.googleAnalytics.id}" />
+	{/if} -->
 
-	{#if store?.facebookPixel?.active}
+	<!-- {#if store?.facebookPixel?.active}
 		<FacebookPixel pixels="{[store?.facebookPixel.id]}" />
-	{/if}
+	{/if} -->
 
-	{#if $navigating}
+	<!-- {#if $navigating}
 		<PreloadingIndicator />
-	{/if}
+	{/if} -->
 
 	{#if !data?.store}
 		<!-- If store not found -->
-		<!-- <h1> store not found </h1> -->
+		<h1>store not found</h1>
 		<div class="h-screen w-full bg-white flex items-center justify-center">
 			<a
 				href="https://litekart.in/"
@@ -114,11 +115,13 @@ onMount(async () => {
 		</div>
 	{:else if data?.store && !data?.store?.closed}
 		<!-- If store found and is not closed -->
-		<!-- <h1> store found and is not closed </h1> -->
+		<!-- <h1>store found and is not closed</h1> -->
 		<section class="minimum-width-rem relative flex min-h-screen flex-col bg-white antialiased">
 			<div class="h-rem w-full flex-1">
 				{#key data.url}
+					
 					<slot />
+					<h1> inside the for loop</h1>
 				{/key}
 			</div>
 		</section>
@@ -129,7 +132,7 @@ onMount(async () => {
 			<BackToTop />
 		{/if}
 
-		{#if data?.store?.whatsappChatButton?.active?.val && data?.store?.whatsappChatButton?.phone?.val}
+		<!-- {#if data?.store?.whatsappChatButton?.active?.val && data?.store?.whatsappChatButton?.phone?.val}
 			<a
 				href="https://wa.me/{data?.store?.whatsappChatButton?.phone?.val.replace('+', '')}"
 				target="_blank"
@@ -140,7 +143,7 @@ onMount(async () => {
 					alt=""
 					class="h-10 w-10 object-contain transform hover:scale-125 hover:-translate-y-2 transition duration-300" />
 			</a>
-		{/if}	
+		{/if} -->
 
 		<!-- {#if ReloadPrompt}
 			<svelte:component this="{ReloadPrompt}" />

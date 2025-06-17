@@ -27,14 +27,16 @@ const seoProps = {
 	description: 'Login with email/phone'
 }
 
-let email = IS_DEV ? 'ww1001' : $page?.url?.searchParams.get('email')
+// let email = IS_DEV ? 'ww1001' : $page?.url?.searchParams.get('email')
+let email
 let err
 let isEmail = false
 let isMobile = false
 let loading = false
 let maxlength = null
 let otpRequestSend = false
-let password = IS_DEV ? 'test' : ''
+// let password = IS_DEV ? 'test' : ''
+let password
 let phone = IS_DEV ? '+918249028220' : ''
 let ref = $page?.url?.searchParams.get('ref')
 let resendAfter = 0
@@ -42,7 +44,8 @@ let selectedCountry = data.countries[0]
 let showDropDown = false
 let showPassword = false
 let type = 'password'
-let value = email ? email : IS_DEV ? 'hi@litekart.in' : null
+// let value = email ? email : IS_DEV ? 'hi@litekart.in' : null
+let value
 let zodErrors = null
 
 onMount(() => {
@@ -217,7 +220,7 @@ function changeNumber() {
 					{:else if isEmail}
 						Wohnwert Backoffice Handle
 					{:else}
-						Email or mobile number
+						WWI Handle
 					{/if}
 				</h6>
 
@@ -226,7 +229,7 @@ function changeNumber() {
 
 					<input
 						type="text"
-						placeholder="Enter email or mobile number"
+						placeholder="WWI Handle"
 						bind:value
 						{maxlength}
 						autofocus
@@ -322,7 +325,7 @@ function changeNumber() {
 								<input
 									id="password"
 									type="text"
-									placeholder="Enter email or mobile number"
+									placeholder="Enter WWI handle"
 									bind:value="{password}"
 									required
 									class="w-full rounded border border-zinc-200 py-3 pl-3 pr-12 focus:border-primary-500 focus:outline-none" />
@@ -330,7 +333,7 @@ function changeNumber() {
 								<input
 									id="password"
 									type="password"
-									placeholder="Enter email or mobile number"
+									placeholder="Enter WWI password"
 									bind:value="{password}"
 									required
 									class="w-full rounded border border-zinc-200 py-3 pl-3 pr-12 focus:border-primary-500 focus:outline-none" />
@@ -419,12 +422,12 @@ function changeNumber() {
 	<!-- Signup & Join as Vendor -->
 
 	<div class="mx-auto mb-5 flex max-w-max flex-col gap-1 text-center text-sm">
-		<a
+		<!-- <a
 			href="{`/auth/signup?ref=${$page.url.searchParams.get('ref') || '/'}`}"
 			aria-label="Click to login with email"
 			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline">
 			Signup
-		</a>
+		</a> -->
 
 		<!-- <a
 			href="{$page.data.store?.adminUrl}?role=vendor&store={$page.data.store}"

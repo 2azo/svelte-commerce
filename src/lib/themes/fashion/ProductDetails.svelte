@@ -726,11 +726,11 @@ function scrollTo(elementId) {
 
 		<!-- Recently Viewed -->
 
-		{#if recentlyViewed?.length}
+		<!-- {#if recentlyViewed?.length}
 			<div class="mb-5 sm:mb-10">
 				<SimilarProductsFromCategorySlug title="Recently Viewed" data="{recentlyViewed}" />
 			</div>
-		{/if}
+		{/if} -->
 	</div>
 </div>
 

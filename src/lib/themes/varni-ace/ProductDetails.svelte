@@ -2074,11 +2074,11 @@ async function updateVariant(variant) {
 
 			<!-- Recently viewed products -->
 
-			{#if recentlyViewed?.length > 1}
+			<!-- {#if recentlyViewed?.length > 1}
 				<hr />
 
 				<RecentlyViewedProductsSlider title="Recently Viewed" products="{recentlyViewed}" />
-			{/if}
+			{/if} -->
 
 			<!-- Category pool buttons -->
 

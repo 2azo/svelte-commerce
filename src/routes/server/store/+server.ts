@@ -15,7 +15,7 @@ export async function GET({ cookies, request, locals, setHeaders }) {
 			origin,
 			cookies
 		})
-		// console.log('storeRes -> ', storeRes)
+		console.log('storeRes -> ', storeRes)
 		store = storeRes.storeOne
 
 		setHeaders({ 'Cache-Control': 'max-age=300' })

@@ -34,6 +34,13 @@ export const load = async ({ locals, url, cookies, fetch }) => {
 		}
 	}
 
+	console.log("###############################")
+	console.log("returned from +layout.server.ts")
 	console.log('+layout.server.ts: Retrieved token ->', token)
+	console.log("locals -> ", locals)
+	console.log("pathname -> ", pathname)
+	console.log("host -> ", host)
+	console.log("q -> ", q)
+	console.log("currentPage -> ", currentPage)
 	return { ...locals, pathname, host, q, currentPage, token }
 }
