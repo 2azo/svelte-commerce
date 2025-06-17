@@ -15,8 +15,8 @@ import PreloadingIndicator from '$lib/PreloadingIndicator.svelte'
 import { Toaster } from 'svelte-sonner'
 
 export let data
-console.log('data start');
-console.log('data', data);
+console.log('data start')
+console.log('data', data)
 
 $: innerWidth = 0
 // $: isAndroid = false
@@ -37,7 +37,6 @@ beforeNavigate(({ willUnload, to }) => {
 		location.href = to.url.href
 	}
 })
-
 </script>
 
 <svelte:head>
@@ -47,15 +46,10 @@ beforeNavigate(({ willUnload, to }) => {
 	<link rel="apple-touch-icon" href="{data.store?.favicon}" />
 	<meta name="apple-mobile-web-app-title" content="{data.store?.websiteName}" />
 	<meta name="application-name" content="{data.store?.websiteName}" />
-	<link
-		href="https://fonts.googleapis.com/css2?family={data.store?.fontFamily ||
-			'Karla'}:wght@100;200;300;400;500;600;700;800;900&display=swap"
-		rel="stylesheet" />
 </svelte:head>
 
 <svelte:window bind:innerWidth />
 <main style="font-family: {customfont};">
-
 	{#if $navigating}
 		<PreloadingIndicator />
 	{/if}
@@ -68,23 +62,23 @@ beforeNavigate(({ willUnload, to }) => {
 		<!-- <h1>store found and is not closed</h1> -->
 		<section class="minimum-width-rem relative flex min-h-screen flex-col bg-white antialiased">
 			<div class="h-rem w-full flex-1">
+				
+				<!-- reactive key block: when url changes, destroy the block and re-render -->
 				{#key data.url}
-					
+					<!-- <pre>{JSON.stringify(data, null, 2)}</pre> -->
+
+					 <!-- slot is a placeholder for infos passed from layout children -->
 					<slot />
-					<h1> inside the for loop</h1>
 				{/key}
 			</div>
 		</section>
 
-		<!-- <PartytownSnippet /> -->
-
 		{#if showBackToTopButton}
 			<BackToTop />
 		{/if}
-
 	{:else}
 		<!-- If store found and is closed -->
-		<h1> store found a	nd is closed </h1>
+		<h1>store found a nd is closed</h1>
 	{/if}
 </main>
 
