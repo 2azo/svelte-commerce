@@ -236,10 +236,8 @@ export const getMedusajsApi = async (endpoint: string, query?: any, token?: any,
 	try {
 		const fullUrl = `${MEDUSAJS_BASE_URL}/${endpoint}`
 		console.log('Requesting URL:', fullUrl)
-
-		// Prepare headers - using Bearer token like in your curl example
 		const headers: Record<string, string> = {
-			'x-publishable-api-key': 'pk_fd30032a2deebdebf93cec580fe0288a275d72ff64a016b217257fc0e0481221'
+			'x-publishable-api-key': 'pk_a18a202f6fb310381da1d56f5595e23323d1866bab598292df801831b2fb8d77'
 		}
 
 		// Add Authorization header if token exists
